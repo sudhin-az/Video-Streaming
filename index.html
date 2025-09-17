@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Streaming</title>
+</head>
+<body>
+  <h1>Video Streaming</h1>
+  <video width="600" controls>
+    <source src="http://localhost:8080/stream/sample.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <h1>Audio Streaming</h1>
+  <audio controls>
+    <source src="http://localhost:8080/stream/sample.mp3" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+
+  <h2>Upload a file</h2>
+  <form action="http://localhost:8080/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>Delete a file</h2>
+  <form id="deleteForm">
+    <input type="text" id="filename" placeholder="Enter filename (e.g., sample.mp4)" />
+    <button type="submit">Delete</button>
+  </form>
+
+  <script>
+    document.getElementById("deleteForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const filename = document.getElementById("filename").value;
+      if (!filename) {
+        alert("Please enter a filename");
+        return;
+      }
+      const res = await fetch(`http://localhost:8080/delete/${filename}`, { method: "DELETE" });
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    });
+  </script>
+</body>
+</html>
